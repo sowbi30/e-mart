@@ -1,9 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 
 const Contact = () => {
-  const { isAuthenticated, user } = useAuth0();
-
   const Wrapper = styled.section`
     padding: 9rem 0 5rem 0;
     text-align: center;
@@ -38,29 +35,27 @@ const Contact = () => {
 
   return (
     <Wrapper>
-      <h2 className="common-heading">Contact page</h2>
+      <h2 className="common-heading" style={{color:'green'}}>Contact Us Here</h2>
 
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.265588856342!2d73.91455641541671!3d18.562061287384868!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c147b8b3a3bf%3A0x6f7fdcc8e4d6c77e!2sPhoenix%20Marketcity%20-%20Viman%20Nagar!5e0!3m2!1sen!2sin!4v1664345115285!5m2!1sen!2sin"
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125766.19577315214!2d78.04042158065874!3d9.917826796721695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c582b1189633%3A0xdc955b7264f63933!2sMadurai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1701529316448!5m2!1sen!2sin" 
         width="100%"
         height="400"
         style={{ border: 0 }}
         allowFullScreen=""
-        title="home"
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"></iframe>
 
       <div className="container">
         <div className="contact-form">
           <form
-            action="https://formspree.io/f/xeqdgwnq"
+            action="https://formspree.io/f/xzbllqjw"  // makes formspree pacakege to store the user data and will get tthe mail info too
             method="POST"
             className="contact-inputs">
+
             <input
               type="text"
               placeholder="username"
               name="username"
-              value={isAuthenticated ? user.name : ""}
               required
               autoComplete="off"
             />
@@ -70,7 +65,6 @@ const Contact = () => {
               name="Email"
               placeholder="Email"
               autoComplete="off"
-              value={isAuthenticated ? user.email : ""}
               required
             />
 
@@ -82,7 +76,7 @@ const Contact = () => {
               autoComplete="off"
               placeholder="Enter you message"></textarea>
 
-            <input type="submit" value="send" />
+            <input type="submit" style={{background:'purple'}}value="send" />
           </form>
         </div>
       </div>
