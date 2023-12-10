@@ -1,19 +1,24 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import About from "./About";
-import Home from "./Home";
-import Products from "./Products";
-import Contact from "./Contact";
-import Cart from "./Cart";
-import SingleProduct from "./SingleProduct";
-import ErrorPage from "./ErrorPage";
-import { GlobalStyle } from "./GlobalStyle";
+import About from "./pages/ABOUT/About";
+import Home from './pages/HOME/Home';
+import Products from './pages/PRODUCT/Productpage'
+import Contact from './pages/CONTACT/Contact'
+import Cart from "./pages/CART/Cart";
+import SingleProduct from "./pages/CART/SingleProduct";
+import ErrorPage from './pages/ERROR/ErrorPage'
+import { GlobalStyle } from "./styles/GlobalStyle";
 import { ThemeProvider } from "styled-components";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./components/HOME/Header";
+import Footer from "./components/HOME/Footer";
+import Checkout from "./pages/CART/Checkout";
+import LoginForm from "./pages/LOGIN/LoginForm";
+import Signup from './pages/LOGIN/SignUp';
+import { UserProvider } from "./context/user_context";
 
 
 const App = () => {
+
   const theme = { //in the gobalstyle ..
     colors: {   // from the globalstyle theme.colors
       heading: "violet",
@@ -40,9 +45,11 @@ const App = () => {
   };
 
   return (
+    
    
     <ThemeProvider theme={theme}> 
       <Router>
+      <UserProvider>
         <GlobalStyle />
         <Header />
        
@@ -53,9 +60,13 @@ const App = () => {
            <Route path="/contact" element={<Contact />} />
           <Route path="/singleproduct/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />
+        </UserProvider>
       </Router>
     </ThemeProvider>
   

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import HeroSection from "./components/HeroSection";
-import { useProductContext } from "./context/productcontex";
+import HeroSection from "../../components/HOME/HeroSection";
+import { useProductContext } from "../../context/productcontex";
 
 const CardContainer = styled.div`
   display: grid;
@@ -78,6 +78,8 @@ const CardDescription = styled.p`
 `;
 
 const About = () => {
+
+  
   const { myName } = useProductContext();
 
   const data = {

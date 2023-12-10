@@ -1,7 +1,7 @@
-import FeatureProduct from "./components/FeatureProduct";
-import HeroSection from "./components/HeroSection";
-import Services from "./components/Services";
-import Trusted from "./components/Trusted";
+import FeatureProduct from "../../components/PRODUCTS/FeatureProduct";
+import HeroSection from "../../components/HOME/HeroSection";
+import Services from "../../components/HOME/Services";
+import Trusted from "../../components/HOME/Trusted";
 import styled from "styled-components";
 
 

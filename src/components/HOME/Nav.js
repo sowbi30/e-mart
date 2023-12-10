@@ -3,14 +3,14 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FiShoppingCart } from "react-icons/fi";
 import { CgMenu, CgClose } from "react-icons/cg";
-import { useCartContext } from "../context/cart_context";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Button } from "../styles/Button";
+import { useCartContext } from "../../context/cart_context";
+import { useUserContext } from "../../context/user_context";
+
+
 
 const Nav = () => {
   const [menuIcon, setMenuIcon] = useState();
-  const { total_item } = useCartContext();
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const { total_item, user, logout } = useUserContext();
 
   const Nav = styled.nav`
     .navbar-lists {
@@ -172,6 +172,7 @@ const Nav = () => {
         <ul className="navbar-lists">
           <li>
             <NavLink
+            style={{color:'purple'}}
               to="/"
               className="navbar-link "
               onClick={() => setMenuIcon(false)}>
@@ -181,6 +182,7 @@ const Nav = () => {
          
           <li>
             <NavLink
+            style={{color:'purple'}}
               to="/products"
               className="navbar-link "
               onClick={() => setMenuIcon(false)}>
@@ -189,6 +191,7 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
+            style={{color:'purple'}}
               to="/about"
               className="navbar-link "
               onClick={() => setMenuIcon(false)}>
@@ -198,27 +201,26 @@ const Nav = () => {
           
           <li>
             <NavLink
+            style={{color:'purple'}}
               to="/contact"
               className="navbar-link "
               onClick={() => setMenuIcon(false)}>
               Contact
-            </NavLink>
+             </NavLink>
+            </li>
+
+            <li>
+            {user ? (
+        <div>
+          <p>Welcome, {user.name}!</p>
+          <button onClick={logout}>Logout</button>
+        </div>
+      ) : (
+            <NavLink to="/login" className= "navbar-btn">
+            <button style={{background:'purple',color:'white',borderRadius:'3px'}}>Login</button>
+             </NavLink>
+              )}
           </li>
-
-          {isAuthenticated && <p>{user.name}</p>}
-
-          {isAuthenticated ? (
-            <li>
-              <Button
-                onClick={() => logout({ returnTo: window.location.origin })}>
-                Log Out
-              </Button>
-            </li>
-          ) : (
-            <li>
-              <Button onClick={() => loginWithRedirect()}>Log In</Button>
-            </li>
-          )}
 
           <li>
             <NavLink to="/cart" className="navbar-link cart-trolley--link">

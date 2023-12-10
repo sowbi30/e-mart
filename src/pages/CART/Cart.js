@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import { useCartContext } from "./context/cart_context";
-import CartItem from "./components/CartItem";
+import { useCartContext } from "../../context/cart_context";
+import CartItem from "../../components/CART/CartItem";
 import { NavLink } from "react-router-dom";
-import { Button } from "./styles/Button";
-import FormatPrice from "./Helpers/FormatPrice";
+import { Button } from "../../styles/Button";
+import FormatPrice from "../../Helpers/FormatPrice";
+import Checkout from "./Checkout";
 
 const Cart = () => {
   const { cart, clearCart, total_price, shipping_fee } = useCartContext();
-  // console.log("🚀 ~ file: Cart.js ~ line 6 ~ Cart ~ cart", cart);
-
+  
   if (!cart || cart.length === 0) {
     return (
       <EmptyDiv>
@@ -42,7 +42,7 @@ const Cart = () => {
             clear cart
           </Button>
         </div>
-
+ 
         {/* order total_amount */}
         <div className="order-total--amount">
           <div className="order-total--subdata">
@@ -65,6 +65,11 @@ const Cart = () => {
                 <FormatPrice price={shipping_fee + total_price} />
               </p>
             </div>
+            <NavLink to="/Checkout">
+        <Button style={{ background: 'green', borderRadius: '4px', marginTop: '1rem' }}>
+          Proceed to Checkout
+        </Button>
+      </NavLink>
           </div>
         </div>
       </div>
