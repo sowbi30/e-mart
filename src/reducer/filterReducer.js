@@ -3,7 +3,7 @@ const filterReducer = (state, action) => {
     case "LOAD_FILTER_PRODUCTS":
       let priceArr = action.payload.map((curElem) => curElem.price);
       console.log(
-        "🚀 ~ file: filterReducer.js ~ line 5 ~ filterReducer ~ priceArr",
+        " ~ file: filterReducer.js ~ line 5 ~ filterReducer ~ priceArr",
         priceArr
       );
 
@@ -15,13 +15,13 @@ const filterReducer = (state, action) => {
       //   0
       // );
       // console.log(
-      //   "🚀 ~ file: filterReducer.js ~ line 16 ~ filterReducer ~ maxPrice",
+      //   " ~ file: filterReducer.js ~ line 16 ~ filterReducer ~ maxPrice",
       //   maxPrice
       // );
 
       let maxPrice = Math.max(...priceArr);
       console.log(
-        "🚀 ~ file: filterReducer.js ~ line 23 ~ filterReducer ~ maxPrice",
+        "~ file: filterReducer.js ~ line 23 ~ filterReducer ~ maxPrice",
         maxPrice
       );
 

@@ -1,24 +1,23 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import About from "./pages/ABOUT/About";
-import Home from './pages/HOME/Home';
-import Products from './pages/PRODUCT/Productpage'
-import Contact from './pages/CONTACT/Contact'
-import Cart from "./pages/CART/Cart";
-import SingleProduct from "./pages/CART/SingleProduct";
-import ErrorPage from './pages/ERROR/ErrorPage'
+import About from "./pages/About";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import Contact from "./pages/Contact";
+import Cart from "./pages/Cart";
+import SingleProduct from "./pages/SingleProduct";
+import ErrorPage from "./pages/ErrorPage";
 import { GlobalStyle } from "./styles/GlobalStyle";
 import { ThemeProvider } from "styled-components";
-import Header from "./components/HOME/Header";
-import Footer from "./components/HOME/Footer";
-import Checkout from "./pages/CART/Checkout";
-import LoginForm from "./pages/LOGIN/LoginForm";
-import Signup from './pages/LOGIN/SignUp';
-import { UserProvider } from "./context/user_context";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Checkout from "./pages/Checkout";
+import Order from "./pages/Order";
+
+
 
 
 const App = () => {
-
   const theme = { //in the gobalstyle ..
     colors: {   // from the globalstyle theme.colors
       heading: "violet",
@@ -45,14 +44,13 @@ const App = () => {
   };
 
   return (
-    
    
     <ThemeProvider theme={theme}> 
       <Router>
-      <UserProvider>
         <GlobalStyle />
         <Header />
-       
+        <Order />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
@@ -60,13 +58,11 @@ const App = () => {
            <Route path="/contact" element={<Contact />} />
           <Route path="/singleproduct/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order" element={<Order />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />
-        </UserProvider>
       </Router>
     </ThemeProvider>
   

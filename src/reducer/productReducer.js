@@ -1,19 +1,13 @@
-const ProductReducer = (state, action) => {
-  if (action.type === "SET_LOADING") {
-    return {
-      ...state,
-      isLoading: true,
-    };
-  }
+const initialState = {
+  isLoading: false,
+  isError: false,
+  products: [],
+  featureProducts: [],
+  isSingleLoading: false,
+  singleProduct: {},
+};
 
-  if (action.type === "API_ERROR") {
-    return {
-      ...state,
-      isLoading: false,
-      isError: true,
-    };
-  }
-
+const productReducer = (state, action) => {
   switch (action.type) {
     case "SET_LOADING":
       return {
@@ -65,4 +59,4 @@ const ProductReducer = (state, action) => {
   }
 };
 
-export default ProductReducer;
+export default productReducer;

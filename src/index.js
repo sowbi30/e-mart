@@ -1,24 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AppProvider } from "./context/productcontex";
 import { FilterContextProvider } from "./context/filter_context";
 import { CartProvider } from "./context/cart_context";
-<<<<<<< HEAD
+import AuthProvider from "./context/AuthProvider";
+import { Auth0Provider } from "@auth0/auth0-react";
 
-=======
-import { Auth0Provider } from '@auth0/auth0-react';
->>>>>>> 96ae731a717ccc7ae986b0b99070b8ef2608fbd5
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-<<<<<<< HEAD
-
-    
-=======
   <Auth0Provider
     domain="dev-rxwcu1m0kqpxdmw5.us.auth0.com"
     clientId="OBzGc5uNmXx1TGfMKmWrZJIkdXJ5bVpQ"
@@ -26,8 +21,8 @@ root.render(
       redirect_uri: window.location.origin
     }}
   >
->>>>>>> 96ae731a717ccc7ae986b0b99070b8ef2608fbd5
-  <AppProvider>
+  <AuthProvider>
+    <AppProvider>
     <FilterContextProvider>
       <CartProvider>
         {/* //from add to cart   */}
@@ -35,11 +30,9 @@ root.render(
       </CartProvider>
     </FilterContextProvider>
   </AppProvider>
-<<<<<<< HEAD
-  
-=======
+  </AuthProvider>
   </Auth0Provider>
->>>>>>> 96ae731a717ccc7ae986b0b99070b8ef2608fbd5
+  
   
 );
 

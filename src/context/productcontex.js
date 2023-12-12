@@ -4,18 +4,17 @@ import reducer from "../reducer/productReducer";
 
 const AppContext = createContext();
 
-const API = "https://api.pujakaitem.com/api/products";
-
-const initialState = {
-  isLoading: false,
-  isError: false,
-  products: [],
-  featureProducts: [],
-  isSingleLoading: false,
-  singleProduct: {},
-};
-
+// Move the API call inside the useEffect
 const AppProvider = ({ children }) => {
+  const initialState = {
+    isLoading: false,
+    isError: false,
+    products: [],
+    featureProducts: [],
+    isSingleLoading: false,
+    singleProduct: {},
+  };
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const getProducts = async (url) => {
@@ -29,8 +28,6 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  // my 2nd api call for single product
-
   const getSingleProduct = async (url) => {
     dispatch({ type: "SET_SINGLE_LOADING" });
     try {
@@ -43,8 +40,32 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getProducts(API);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://api.pujakaitem.com/api/products");
+  
+        if (!response.ok) {
+          // Handle non-successful response (e.g., show an error)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+  
+        // Check if data is an array before dispatching
+        if (Array.isArray(data)) {
+          dispatch({ type: "SET_API_DATA", payload: data });
+        } else {
+          // Handle the case where data is not an array (e.g., show an error)
+          throw new Error("Received data is not an array.");
+        }
+      } catch (error) {
+        dispatch({ type: "API_ERROR" });
+      }
+    };
+  
+    fetchData();
   }, []);
+  
 
   return (
     <AppContext.Provider value={{ ...state, getSingleProduct }}>
@@ -53,7 +74,6 @@ const AppProvider = ({ children }) => {
   );
 };
 
-// custom hooks
 const useProductContext = () => {
   return useContext(AppContext);
 };
