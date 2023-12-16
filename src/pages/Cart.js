@@ -65,11 +65,13 @@ const Cart = () => {
                 <FormatPrice price={shipping_fee + total_price} />
               </p>
             </div>
-            <NavLink to="/checkout">
-        <Button style={{ background: 'green', borderRadius: '4px', marginTop: '1rem' }}>
-          Proceed to Checkout
-        </Button>
-      </NavLink>
+              <NavLink to="/checkout">
+
+          <Button style={{ background: 'green', borderRadius: '4px', marginTop: '1rem' }}>
+            Proceed to Checkout
+          </Button>
+          
+        </NavLink>
           </div>
         </div>
       </div>

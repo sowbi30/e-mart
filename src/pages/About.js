@@ -25,7 +25,7 @@ const FormContainer = styled.div`
 `;
 
 const FormInput = styled.input`
-background: lavender;
+  background: lavender;
   padding: 0.5rem;
   width: 80%;
   align-self: center;
@@ -42,7 +42,6 @@ const Form = styled.form`
   width: 100%;
 `;
 
-
 const FormButton = styled.button`
   background: ${({ theme }) => theme.colors.btn};
   color: white;
@@ -52,7 +51,11 @@ const FormButton = styled.button`
   align-self: center; /* Center the button */
 `;
 
-
+const ValidationError = styled.div`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+`;
 // Define a Card component
 const Card = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -79,6 +82,7 @@ const CardDescription = styled.p`
   font-size: 13px;
 `;
 
+
 const About = () => {
   const { myName } = useProductContext();
 
@@ -87,18 +91,21 @@ const About = () => {
     textColor: "lavender",
   };
 
-  // State for form data and reviews
   const [formData, setFormData] = useState({
     name: "",
-    email:"",
+    email: "",
     review: "",
     imageUrl: "",
-    
   });
 
   const [reviews, setReviews] = useState([]);
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    email: "",
+    review: "",
+    imageUrl: "",
+  });
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -107,15 +114,39 @@ const About = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newErrors = { name: "", email: "", review: "", imageUrl: "" };
+
     // Validate form data before adding to reviews
-    if (formData.name &&formData.email && formData.imageUrl && formData.review) {
-      setReviews((prevReviews) => [...prevReviews, formData]);
-      // Clear form data after submission
-      setFormData({ name: "", email: "", imageUrl: "", review: "" });
+    if (formData.name.trim() === "") {
+      newErrors.name = "Please enter your name";
     }
+
+    if (formData.email.trim() === "" || !formData.email.includes("@")) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (formData.review.trim() === "") {
+      newErrors.review = "Please enter your review";
+    }
+
+    if (formData.imageUrl.trim() === "") {
+      newErrors.imageUrl = "Please enter the image URL";
+    }
+
+    // If there are validation errors, update the state and stop the submission
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      setFormErrors(newErrors);
+      return;
+    }
+
+    setReviews((prevReviews) => [...prevReviews, formData]);
+
+    // Clear form data and errors after submission
+    setFormData({ name: "", email: "", imageUrl: "", review: "" });
+    setFormErrors({ name: "", email: "", review: "", imageUrl: "" });
   };
 
   return (
@@ -124,43 +155,50 @@ const About = () => {
       <HeroSection myData={data} />
 
       {/* Form Container */}
-      <h2 style={{color:'green',textAlign:'center'}}>Your Review's Make Us Grow</h2>
+      <h2 style={{ color: 'green', textAlign: 'center' }}>Your Review's Make Us Grow</h2>
       <FormContainer>
-
         <Form onSubmit={handleSubmit}>
-          <FormInput 
+          <FormInput
             type="text"
             name="name"
             placeholder="Enter Your Name"
             value={formData.name}
             onChange={handleChange}
-           
           />
-            <FormInput 
+          <ValidationError>{formErrors.name}</ValidationError>
+
+          <FormInput
             type="email"
             name="email"
             placeholder="Enter your Mail"
             value={formData.email}
             onChange={handleChange}
           />
-            <FormInput
+          <ValidationError>{formErrors.email}</ValidationError>
+
+          <FormInput
             type="text"
             name="review"
             placeholder="Review"
             value={formData.review}
             onChange={handleChange}
           />
-          
+          <ValidationError>{formErrors.review}</ValidationError>
+
           <FormInput
             type="text"
             name="imageUrl"
-            placeholder="place your Image URL/anyimage "
+            placeholder="Place your Image URL/any image "
             value={formData.imageUrl}
             onChange={handleChange}
           />
-          <p style={{textAlign:"center",color:'grey'}}>can use this URL :<br/>https://th.bing.com/th/id/OIP.UGlKxiZQylR3CnJIXSbFIAHaLL?rs=1&pid=ImgDetMain</p>
- 
-          <FormButton style={{background:'pink',color:'purple',borderStyle:'none',borderRadius:'4px'}}type="submit">Submit</FormButton>
+          <ValidationError>{formErrors.imageUrl}</ValidationError>
+
+          <p style={{ textAlign: "center", color: 'grey' }}>
+            You can use this URL:<br />https://th.bing.com/th/id/OIP.UGlKxiZQylR3CnJIXSbFIAHaLL?rs=1&pid=ImgDetMain
+          </p>
+
+          <FormButton style={{ background: 'pink', color: 'purple', borderStyle: 'none', borderRadius: '4px' }} type="submit">Submit</FormButton>
         </Form>
       </FormContainer>
 
@@ -169,7 +207,7 @@ const About = () => {
         {reviews.map((review, index) => (
           <Card key={index}>
             <CardImage src={review.imageUrl} alt={`Card Image ${index + 1}`} />
-            <CardTitle>{review.name}</CardTitle> <br/>
+            <CardTitle>{review.name}</CardTitle> <br />
             <CardDescription>{review.review}</CardDescription>
           </Card>
         ))}

@@ -1,145 +1,334 @@
-// Checkout.js
+import React, { useState } from "react";
+import "../styles/modal.css";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useFormik } from 'formik';
+import Form from 'react-bootstrap/Form';
+import {useCartContext} from '../context/cart_context';
 
-import React from "react";
-import styled from "styled-components";
-import { Button } from "../styles/Button";
-import { useState } from "react";
-import { useCartContext } from "../context/cart_context";
-import FormatPrice from "../Helpers/FormatPrice";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+const validate = values => {
+  const errors = {};
+  if (!values.name) {
+    errors.name = 'Required';
+  } else if (values.name.length > 40) {
+    errors.name = 'Must be 40 characters or less';
+  }
+
+  if (!values.address) {
+    errors.address = 'Required';
+  } else if (values.address.length > 25) {
+    errors.address = 'Must be 25 characters or less';
+  }
+
+  if (!values.pincode) {
+    errors.pincode = 'Required';
+  } else if (String(values.pincode).split("").length > 6) {
+    errors.pincode = 'Must be 6 numbers';
+  }
+
+  return errors;
+};
+
+
 
 const Checkout = () => {
-  const { total_price, shipping_fee } = useCartContext();
-  const navigate = useNavigate(); // Use useNavigate hook
   const [show, setShow] = useState(false);
+  const [activeTab, setActiveTab] = useState("visa"); // Initial active tab
 
-    const handleShow = () => {
-        setShow(true);
-        navigate("/order");
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // order confirmation and redirect to home page
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/";
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      address: '',
+      pincode: '',
+    },
+    validate,
+  })
+
+  const { clearCart } = useCartContext();
+
+  const handleProceedToCheckout = () => {
+    // Check if the form is valid before showing the modal
+    if (formik.isValid) {
+      handleShow();
     }
+  };
 
-
-  return (
-    <Wrapper>
-      <div className="container">
-        <h2>User-Details</h2>
-
-            <hr />
-
-            {/* Form for shipping information */}
-            <form style={{width:'100%'}}>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" placeholder="Enter Your Name" style={{width:'80%'}} name="name" required />
-
-            <label htmlFor="address">Address:</label>
-            <textarea id="address" name="address" placeholder="Enter Your Address" required></textarea>
-
-            <label htmlFor="card">State:</label>
-            <input type="text" id="state"  name="state" required />
-
-            <label htmlFor="expiry">Country:</label>
-            <input type="text" id="country" name="country" required />
-
-            <label htmlFor="cvv">Pincode:</label>
-            <input type="number" id="pincode" name="pincode" required />
-
-           
-            </form>
-
-            {/* Order summary */}
-            <div className="order-summary">
-            <h3>Order Summary</h3>
-            <div>
-                <p>Subtotal:</p>
-                <p>
-                <FormatPrice price={total_price} />
-                </p>
-            </div>
-            <div>
-                <p>Shipping Fee:</p>
-                <p>
-                <FormatPrice price={shipping_fee} />
-                </p>
-            </div>
-            <hr />
-            <div>
-                <p>Total:</p>
-                <p>
-                <FormatPrice price={shipping_fee + total_price} />
-                </p>
-            </div>
-            <Link to="/order">
-            <Button variant="primary" onClick={handleShow} className="py-2">
-            Proceed to Checkout
-            </Button>
-            </Link>
-         </div>
-        </div>
-        </Wrapper>
-    );
-    };
-
-    const Wrapper = styled.section`
-    background:lightyellow;
-    padding: 9rem 0;
-
-    .container {
-        background:lightgreen;
-        border:2px solid green;
-        max-width: 650px;
-        margin: 0 auto;
-        text-align:left;
-    }
-    .container h2{
-       color:Darkgreen;
-    }
-
-    form {
-        display: grid;
-        gap: 1.5rem;
-             
-
-        label {
-        font-size: 1.2rem;
-        color:purple;
-        }
-
-        input,
-        textarea {
-           
-        padding:10px;
-        background:lavender;
+     const handleOrderConfirm = () => {
+      const isConfirmed = window.confirm("Your order placed successfully! Do you want to clear the cart?");
+      if (isConfirmed) {
+        clearCart();
+        navigate(from, { replace: true });
       }
-    }
+    };
+  
+  return (
 
-    .order-summary {
-        margin-top: 2rem;
-        border: 1px solid green;
-        padding: 1.5rem;
-        border-radius: 5px;
-        color:purple;
 
-        h3 {
-        font-size: 2rem;
-        }
+    <div className="modalCard">
+      <Form style={{ width: "480px", height: "480px", backgroundColor: "lightpink", textAlign: "center" }} onSubmit={formik.handleSubmit}>
+  <h1 className='mb-4 text-success' style={{ color: 'brown', textDecoration: 'underline' }}>Courier Address</h1>
+  <Form.Group className='mb-3 d-flex justify-content-center align-items-center'>
+    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' }}>Name:</Form.Label>
+    <Form.Control
+      style={{ width: '15rem' }}
+      type="text"
+      id="name"
+      name="name"
+      placeholder="Enter name"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.name}
+    />
+    {formik.touched.name && formik.errors.name ? (
+      <div style={{ color: 'red', width: '15rem', textAlign: 'left' }}>{formik.errors.name}</div>
+    ) : null}
+  </Form.Group>
+  <Form.Group className='mb-3 d-flex justify-content-center align-items-center'>
+    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' }}>Address:</Form.Label>
+    <Form.Control
+      style={{ width: '15rem' }}
+      type="text"
+      id="address"
+      name="address"
+      placeholder="Enter address"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.address}
+    />
+    {formik.touched.address && formik.errors.address ? (
+      <div style={{ color: 'red', width: '15rem', textAlign: 'left' }}>{formik.errors.address}</div>
+    ) : null}
+  </Form.Group>
+  <Form.Group className='mb-3 d-flex justify-content-center align-items-center'>
+    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' }}>Pincode:</Form.Label>
+    <Form.Control
+      style={{ width: '15rem' }}
+      required
+      type="text"
+      id="pincode"
+      name="pincode"
+      placeholder="Enter pincode"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.pincode}
+    />
+    {formik.touched.pincode && formik.errors.pincode ? (
+      <div style={{ color: 'red', width: '15rem', textAlign: 'left' }}>{formik.errors.pincode}</div>
+    ) : null}
+  </Form.Group>
+  <Button variant="primary" onClick={handleProceedToCheckout} className="py-2">
+    Proceed to Checkout
+  </Button>
+</Form>
 
-        div {
-        display: flex;
-        justify-content: space-between;
-        margin: 1rem 0;
-        }
 
-        hr {
-        margin: 1rem 0;
-        border: none;
-        border-top: 1px solid #ccc;
-        }
-        Button{
-            width: 50%;
-            display:flex;
-            justify-content:center;
-        }
-    }
-    `;
+      <Modal
+        show={show}
+        onHide={handleClose}
+        animation={false}
+        className="modal fade"
+        centered
+      >
+        <div className="modal-dialog">
+          <h5 className="px-3 mb-3">Select Your Payment Method</h5>
+          <div className="modal-content">
+            <div className="modal-body">
+              <div className="tabs mt-3">
+                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                  <li className="nav-item" role="presentation">
+                    <a
+                      className={`nav-link ${
+                        activeTab === "visa" ? "active" : ""
+                      }`}
+                      id="visa-tab"
+                      data-toggle="tab"
+                      href="#visa"
+                      role="tab"
+                      aria-controls="visa"
+                      aria-selected={activeTab === "visa"}
+                      onClick={() => handleTabChange("visa")}
+                    >
+                      <img src="https://i.imgur.com/sB4jftM.png" width="80" />
+                    </a>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <a
+                      className={`nav-link ${
+                        activeTab === "paypal" ? "active" : ""
+                      }`}
+                      id="paypal-tab"
+                      data-toggle="tab"
+                      href="#paypal"
+                      role="tab"
+                      aria-controls="paypal"
+                      aria-selected={activeTab === "paypal"}
+                      onClick={() => handleTabChange("paypal")}
+                    >
+                      <img src="https://i.imgur.com/yK7EDD1.png" width="80" />
+                    </a>
+                  </li>
+                </ul>
+                <div className="tab-content" id="myTabContent">
+                  {/* visa content */}
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "visa" ? "show active" : ""
+                    }`}
+                    id="visa"
+                    role="tabpanel"
+                    aria-labelledby="visa-tab"
+                  >
+                    {/* Visa tab content */}
+                    <div className="mt-4 mx-4">
+                      <div className="text-center">
+                        <h5>Credit card</h5>
+                      </div>
+                      <div className="form mt-3">
+                        <div className="inputbox">
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            required="required"
+                          />
+                          <span>Cardholder Name</span>
+                        </div>
+                        <div className="inputbox">
+                          <input
+                            type="text"
+                            name="name"
+                            min="1"
+                            max="999"
+                            className="form-control"
+                            required="required"
+                          />
+                          <span>Card Number</span> <i className="fa fa-eye"></i>
+                        </div>
+                        <div className="d-flex flex-row">
+                          <div className="inputbox">
+                            <input
+                              type="text"
+                              name="name"
+                              min="1"
+                              max="999"
+                              className="form-control"
+                              required="required"
+                            />
+                            <span>Expiration Date</span>
+                          </div>
+                          <div className="inputbox">
+                            <input
+                              type="text"
+                              name="name"
+                              min="1"
+                              max="999"
+                              className="form-control"
+                              required="required"
+                            />
+                            <span>CVV</span>
+                          </div>
+                        </div>
+                        <div className="px-5 pay">
+                          <button className="btn btn-success btn-block" onClick={handleOrderConfirm}>
+                            Add card
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* paypal content */}
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "paypal" ? "show active" : ""
+                    }`}
+                    id="paypal"
+                    role="tabpanel"
+                    aria-labelledby="paypal-tab"
+                  >
+                    {/* Paypal tab content */}
+                    <div className="mx-4 mt-4">
+                      <div className="text-center">
+                        <h5>Paypal Account Info</h5>
+                      </div>
+                      <div className="form mt-3">
+                        <div className="inputbox">
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            required="required"
+                          />
+                          <span>Enter your email</span>
+                        </div>
+                        <div className="inputbox">
+                          <input
+                            type="text"
+                            name="name"
+                            min="1"
+                            max="999"
+                            className="form-control"
+                            required="required"
+                          />
+                          <span>Your Name</span>
+                        </div>
+                        <div className="d-flex flex-row">
+                          <div className="inputbox">
+                            <input
+                              type="text"
+                              name="name"
+                              min="1"
+                              max="999"
+                              className="form-control"
+                              required="required"
+                            />
+                            <span>Extra Info</span>
+                          </div>
+                          <div className="inputbox">
+                            <input
+                              type="text"
+                              name="name"
+                              min="1"
+                              max="999"
+                              className="form-control"
+                              required="required"
+                            />
+                            <span></span>
+                          </div>
+                        </div>
+                        <div className="pay px-5">
+                          <button className="btn btn-primary btn-block" onClick={handleOrderConfirm}>
+                            Add paypal
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* payment desclaimer */}
+              <p className="mt-3 px-4 p-Disclaimer">
+              <em>Payment Disclaimer:</em> In no event shall payment or partial payment by Owner for any material or service
+              </p>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+};
 
-    export default Checkout;
+export default Checkout;

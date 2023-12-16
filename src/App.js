@@ -12,7 +12,6 @@ import { ThemeProvider } from "styled-components";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Checkout from "./pages/Checkout";
-import Order from "./pages/Order";
 
 
 
@@ -49,7 +48,7 @@ const App = () => {
       <Router>
         <GlobalStyle />
         <Header />
-        <Order />
+        {/* <Order /> */}
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -59,7 +58,6 @@ const App = () => {
           <Route path="/singleproduct/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order" element={<Order />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />
