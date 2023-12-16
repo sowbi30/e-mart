@@ -247,6 +247,86 @@ const StyledNav = styled.div`
         padding: 0.8rem 1.4rem;
       }
     }
+ 
+    @media (max-width: ${({ theme }) => theme.media.mobile}) {
+      .navbar-lists {
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+  
+        .navbar-link {
+          font-size: 4.2rem;
+        }
+      }
+  
+      .active .navbar-lists {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(0);
+        z-index: 999;
+      }
+  
+      .mobile-navbar-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        background-color: transparent;
+        cursor: pointer;
+        border: none;
+  
+        .mobile-nav-icon,
+        .close-outline {
+          font-size: 4.2rem;
+          color: ${({ theme }) => theme.colors.black};
+        }
+  
+        .close-outline {
+          display: none;
+        }
+      }
+  
+      .active .mobile-nav-icon {
+        display: none;
+      }
+  
+      .active .close-outline {
+        display: inline-block;
+      }
+  
+      .cart-trolley--link {
+        position: relative;
+  
+        .cart-trolley {
+          position: relative;
+          font-size: 5.2rem;
+        }
+  
+        .cart-total--item {
+          width: 4.2rem;
+          height: 4.2rem;
+          font-size: 2rem;
+        }
+      }
+  
+      .user-logout,
+      .user-login {
+        font-size: 2.2rem;
+        padding: 0.8rem 1.4rem;
+      }
+    }
   `;
 
 export default Nav;

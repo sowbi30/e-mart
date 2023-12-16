@@ -17,8 +17,8 @@ const validate = values => {
 
   if (!values.address) {
     errors.address = 'Required';
-  } else if (values.address.length > 25) {
-    errors.address = 'Must be 25 characters or less';
+  } else if (values.address.length > 40) {
+    errors.address = 'Must be 40 characters or less';
   }
 
   if (!values.pincode) {
@@ -79,12 +79,12 @@ const Checkout = () => {
 
 
     <div className="modalCard">
-      <Form style={{ width: "480px", height: "480px", backgroundColor: "lightpink", textAlign: "center" }} onSubmit={formik.handleSubmit}>
-  <h1 className='mb-4 text-success' style={{ color: 'brown', textDecoration: 'underline' }}>Courier Address</h1>
+      <Form style={{ width: "480px", marginTop:'50px',border:'2px solid green',height: "250px", backgroundColor: "lightgreen", textAlign: "center" }} onSubmit={formik.handleSubmit}>
+  <h1 className='mb-4 text-success' style={{ color: 'brown', textDecoration: 'underline', fontSize:'20px' }}>Courier Address</h1>
   <Form.Group className='mb-3 d-flex justify-content-center align-items-center'>
-    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' }}>Name:</Form.Label>
+    <Form.Label style={{ paddingBottom: '2rem', width: '15rem',fontSize:'15px' }}>Name:</Form.Label>
     <Form.Control
-      style={{ width: '15rem' }}
+      style={{ width: '15rem',padding:'5px' }}
       type="text"
       id="name"
       name="name"
@@ -98,7 +98,7 @@ const Checkout = () => {
     ) : null}
   </Form.Group>
   <Form.Group className='mb-3 d-flex justify-content-center align-items-center'>
-    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' }}>Address:</Form.Label>
+    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' ,fontSize:'15px' }}>Address:</Form.Label>
     <Form.Control
       style={{ width: '15rem' }}
       type="text"
@@ -114,7 +114,7 @@ const Checkout = () => {
     ) : null}
   </Form.Group>
   <Form.Group className='mb-3 d-flex justify-content-center align-items-center'>
-    <Form.Label style={{ paddingBottom: '2rem', width: '15rem' }}>Pincode:</Form.Label>
+    <Form.Label style={{ paddingBottom: '2rem', width: '15rem',fontSize:'15px'  }}>Pincode:</Form.Label>
     <Form.Control
       style={{ width: '15rem' }}
       required
@@ -130,7 +130,11 @@ const Checkout = () => {
       <div style={{ color: 'red', width: '15rem', textAlign: 'left' }}>{formik.errors.pincode}</div>
     ) : null}
   </Form.Group>
-  <Button variant="primary" onClick={handleProceedToCheckout} className="py-2">
+  <Button
+   variant="primary" 
+   style={{background:'purple',color:'white'}}
+  onClick={handleProceedToCheckout} 
+  className="py-2">
     Proceed to Checkout
   </Button>
 </Form>
